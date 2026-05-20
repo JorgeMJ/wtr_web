@@ -10,8 +10,46 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 0) do
+ActiveRecord::Schema[7.1].define(version: 2026_05_09_224734) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "accounts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "children", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "name"], name: "index_children_on_account_id_and_name", unique: true
+    t.index ["account_id"], name: "index_children_on_account_id"
+  end
+
+  create_table "custodians", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "fname", null: false
+    t.string "lname"
+    t.string "relationship_to_children"
+    t.boolean "is_admin"
+    t.string "email", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_custodians_on_account_id"
+  end
+
+  create_table "words", force: :cascade do |t|
+    t.bigint "child_id", null: false
+    t.string "word", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["child_id", "word"], name: "index_words_on_child_id_and_word", unique: true
+    t.index ["child_id"], name: "index_words_on_child_id"
+  end
+
+  add_foreign_key "children", "accounts"
+  add_foreign_key "custodians", "accounts"
+  add_foreign_key "words", "children"
 end

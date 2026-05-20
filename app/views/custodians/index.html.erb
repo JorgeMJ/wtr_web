@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Custodians</h1>
+
+<div id="custodians">
+  <% @custodians.each do |custodian| %>
+    <%= render custodian %>
+    <p>
+      <%= link_to "Show this custodian", custodian %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New custodian", new_custodian_path %>

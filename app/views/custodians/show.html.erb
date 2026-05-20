@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @custodian %>
+
+<div>
+  <%= link_to "Edit this custodian", edit_custodian_path(@custodian) %> |
+  <%= link_to "Back to custodians", custodians_path %>
+
+  <%= button_to "Destroy this custodian", @custodian, method: :delete %>
+</div>
