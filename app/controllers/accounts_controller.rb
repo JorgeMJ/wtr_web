@@ -23,14 +23,24 @@ class AccountsController < ApplicationController
   def create
     @account = Account.new(account_params)
 
-    respond_to do |format|
-      if @account.save
-        format.html { redirect_to @account, notice: "Account was successfully created." }
-        format.json { render :show, status: :created, location: @account }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @account.errors, status: :unprocessable_entity }
-      end
+    if @account.save
+      #Create first custodian for the account, which will be the admin custodian
+      custodian = @account.custodians.create!(
+        fname:  @account.parent_name,
+        email: @account.parent_email
+      )
+
+      # Set the admin custodian for the account
+      @account.update!(admin_custodian_id: custodian.id)
+
+      #TODO: redirecto to @account (is the account we just created):
+      #- show id account details
+      #- show who is the admin custodian
+      #-Add to bttns to redirect to:
+      # - "Parent list" and "children list"
+      redirect_to @account
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -65,6 +75,7 @@ class AccountsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def account_params
-      params.fetch(:account, {})
+      # params.fetch(:account, {})
+      params.require(:account).permit(:parent_name, :parent_email)
     end
 end

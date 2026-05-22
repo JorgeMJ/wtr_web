@@ -10,13 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_05_09_224734) do
+ActiveRecord::Schema[7.1].define(version: 2026_05_22_200705) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "accounts", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "admin_custodian_id"
+    t.index ["admin_custodian_id"], name: "index_accounts_on_admin_custodian_id"
   end
 
   create_table "children", force: :cascade do |t|
@@ -49,6 +51,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_09_224734) do
     t.index ["child_id"], name: "index_words_on_child_id"
   end
 
+  add_foreign_key "accounts", "custodians", column: "admin_custodian_id"
   add_foreign_key "children", "accounts"
   add_foreign_key "custodians", "accounts"
   add_foreign_key "words", "children"
