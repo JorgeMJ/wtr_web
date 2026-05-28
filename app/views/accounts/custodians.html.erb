@@ -1,0 +1,9 @@
+<h1>Custodians for Account <%= @account.id %></h1>
+
+<ul>
+  <% @custodians.each do |custodian| %>
+    <li><%= custodian.fname %></li>
+  <% end %>
+</ul>
+
+<%= link_to "Back to Account", account_path(@account) %>

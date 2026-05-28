@@ -1,0 +1,9 @@
+<h1>Children for Account <%= @account.id %></h1>
+
+<ul>
+  <% @children.each do |child| %>
+    <li><%= child.name %></li>
+  <% end %>
+</ul>
+
+<%= link_to "Back to Account", account_path(@account) %>

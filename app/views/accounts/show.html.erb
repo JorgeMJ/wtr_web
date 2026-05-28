@@ -8,3 +8,8 @@
 
   <%= button_to "Destroy this account", @account, method: :delete %>
 </div>
+
+<div>
+  <%= link_to "Children List", children_account_path(@account), class: "button"%> |
+  <%= link_to "Custodians List", custodians_account_path(@account), class: "button" %>
+</div>

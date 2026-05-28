@@ -3,6 +3,8 @@ class AccountsController < ApplicationController
 
   # GET /accounts or /accounts.json
   def index
+    #Renders all accounts index.html
+    #The user shouldn't have access to see all accounts. Only admins
     @accounts = Account.all
   end
 
@@ -66,6 +68,18 @@ class AccountsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def children
+    @account = Account.find(params[:id])
+    @children = @account.children
+  end
+
+  def custodians
+    @account = Account.find(params[:id])
+    @custodians = @account.custodians
+  end
+
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
