@@ -1,4 +1,5 @@
 class ChildrenController < ApplicationController
+  before_action :set_account, only: %i[ new create ]
   before_action :set_child, only: %i[ show edit update destroy ]
 
   # GET /children or /children.json
@@ -12,7 +13,8 @@ class ChildrenController < ApplicationController
 
   # GET /children/new
   def new
-    @child = Child.new
+    # @child = Child.new
+    @child = @account.children.new
   end
 
   # GET /children/1/edit
@@ -20,17 +22,26 @@ class ChildrenController < ApplicationController
   end
 
   # POST /children or /children.json
-  def create
-    @child = Child.new(child_params)
+  # def create
+  #   @child = Child.new(child_params)
 
-    respond_to do |format|
-      if @child.save
-        format.html { redirect_to @child, notice: "Child was successfully created." }
-        format.json { render :show, status: :created, location: @child }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @child.errors, status: :unprocessable_entity }
-      end
+  #   respond_to do |format|
+  #     if @child.save
+  #       format.html { redirect_to @child, notice: "Child was successfully created." }
+  #       format.json { render :show, status: :created, location: @child }
+  #     else
+  #       format.html { render :new, status: :unprocessable_entity }
+  #       format.json { render json: @child.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
+  def create  
+    @child = @account.children.new(child_params)
+
+    if @child.save
+      redirect_to children_account_path(@account), notice: "Child created"
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -63,8 +74,13 @@ class ChildrenController < ApplicationController
       @child = Child.find(params[:id])
     end
 
+    def set_account
+      @account = Account.find(params[:account_id])
+    end
+
     # Only allow a list of trusted parameters through.
     def child_params
-      params.fetch(:child, {})
+      # params.fetch(:child, {})
+      params.require(:child).permit(:name) #Make sure we pass the mandatory params
     end
 end

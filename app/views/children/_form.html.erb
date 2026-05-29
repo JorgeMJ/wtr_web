@@ -1,15 +1,13 @@
-<%= form_with(model: child) do |form| %>
-  <% if child.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(child.errors.count, "error") %> prohibited this child from being saved:</h2>
+<% form_model = defined?(@account) && @account.present? ? [@account, child] : child %>
+<%= form_with(model: form_model, local: true) do |form| %>
 
-      <ul>
-        <% child.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+
+   <h3>Child Information</h3>
+
+     <div>
+    <%= form.label :name, "Child Name" %>
+    <%= form.text_field :name %>
+  </div>
 
   <div>
     <%= form.submit %>

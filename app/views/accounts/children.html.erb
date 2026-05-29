@@ -1,3 +1,4 @@
+<p style="color: green"><%= notice %></p>
 <h1>Children for Account <%= @account.id %></h1>
 
 <ul>
@@ -5,5 +6,10 @@
     <li><%= child.name %></li>
   <% end %>
 </ul>
+
+<div style="margin-bottom: 20px;">
+  <%= link_to "Add New Child", new_account_child_path(@account), class: "button" %>
+</div>
+
 
 <%= link_to "Back to Account", account_path(@account) %>
