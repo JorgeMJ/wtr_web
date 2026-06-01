@@ -25,10 +25,10 @@ class WordsController < ApplicationController
 
     respond_to do |format|
       if @word.save
-        format.html { redirect_to @word, notice: "Word was successfully created." }
+        format.html { redirect_to account_child_path(@word.child.account, @word.child), notice: "Word was successfully created." }
         format.json { render :show, status: :created, location: @word }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { redirect_to account_child_path(@word.child.account, @word.child), alert: @word.errors.full_messages.to_sentence }
         format.json { render json: @word.errors, status: :unprocessable_entity }
       end
     end
@@ -65,6 +65,6 @@ class WordsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def word_params
-      params.fetch(:word, {})
+      params.require(:word).permit(:word, :child_id)
     end
 end

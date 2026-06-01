@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     get :children, on: :member
     get :custodians, on: :member
 
-    resources :children, only: [:new, :create]
+    resources :children, only: [:new, :create, :show]
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

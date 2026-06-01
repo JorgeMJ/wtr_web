@@ -1,6 +1,46 @@
 <p style="color: green"><%= notice %></p>
 
+<h1><%= @child.name %></h1>
+
 <%= render @child %>
+<p>PARAMS <%= @params %></p>
+
+<section style="margin-top: 1.5rem;">
+  <h2>Add a word</h2>
+  <%= form_with(model: @word, url: words_path, local: true) do |form| %>
+    <div>
+      <%= form.label :word, "Word" %><br>
+      <%= form.text_field :word %>
+    </div>
+    <%= form.hidden_field :child_id, value: @child.id %>
+    <div style="margin-top: 0.5rem;">
+      <%= form.submit "Add Word" %>
+    </div>
+  <% end %>
+</section>
+
+<section style="margin-top: 1.5rem;">
+  <% if @child.words.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Word</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @child.words.each do |word| %>
+          <tr>
+            <td><%= word.word %></td>
+            <td><%= word.created_at %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No words added yet.</p>
+  <% end %>
+</section>
 
 <div>
   <%= link_to "Edit this child", edit_child_path(@child) %> |

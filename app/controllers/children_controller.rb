@@ -1,5 +1,5 @@
 class ChildrenController < ApplicationController
-  before_action :set_account, only: %i[ new create ]
+  before_action :set_account, only: %i[ new create show]
   before_action :set_child, only: %i[ show edit update destroy ]
 
   # GET /children or /children.json
@@ -9,6 +9,8 @@ class ChildrenController < ApplicationController
 
   # GET /children/1 or /children/1.json
   def show
+    @child = @account.children.find(params[:id])
+    @word = @child.words.new #to set the model of the form "add new word"
   end
 
   # GET /children/new
@@ -76,6 +78,7 @@ class ChildrenController < ApplicationController
 
     def set_account
       @account = Account.find(params[:account_id])
+      @params = params
     end
 
     # Only allow a list of trusted parameters through.
