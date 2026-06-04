@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   # root "accounts#new"
   root "main#index"
+  
+  post "/signin", to: "main#signin", as: :signin
 
   resources :words
   resources :children
