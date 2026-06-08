@@ -10,7 +10,8 @@ class ChildrenController < ApplicationController
   # GET /children/1 or /children/1.json
   def show
     @child = @account.children.find(params[:id])
-    @word = @child.words.new #to set the model of the form "add new word"
+    # @word = @child.words.new #to set the model of the form "add new word"
+    @word = Word.new(child_id: @child.id) 
   end
 
   # GET /children/new

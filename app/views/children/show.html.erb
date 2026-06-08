@@ -12,6 +12,10 @@
       <%= form.text_field :word %>
     </div>
     <%= form.hidden_field :child_id, value: @child.id %>
+    <div>
+      <%= form.label :date, "Time" %><br>
+      <%= form.date_select :date %>
+    </div>
     <div style="margin-top: 0.5rem;">
       <%= form.submit "Add Word" %>
     </div>
@@ -31,7 +35,7 @@
         <% @child.words.each do |word| %>
           <tr>
             <td><%= word.word %></td>
-            <td><%= word.created_at %></td>
+            <td><%= word.date %></td>
           </tr>
         <% end %>
       </tbody>
