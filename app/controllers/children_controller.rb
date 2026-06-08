@@ -63,10 +63,11 @@ class ChildrenController < ApplicationController
 
   # DELETE /children/1 or /children/1.json
   def destroy
+    @account = @child.account
     @child.destroy!
 
     respond_to do |format|
-      format.html { redirect_to children_path, notice: "Child was successfully destroyed.", status: :see_other }
+      format.html { redirect_to children_account_path(@account), notice: "Child was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
   end
@@ -78,8 +79,8 @@ class ChildrenController < ApplicationController
     end
 
     def set_account
+      puts 'MY_PARAMS', params
       @account = Account.find(params[:account_id])
-      @params = params
     end
 
     # Only allow a list of trusted parameters through.
