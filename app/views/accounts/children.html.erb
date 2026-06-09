@@ -3,7 +3,10 @@
 
 <ul>
   <% @children.each do |child| %>
-    <li><%= link_to child.name, account_child_path(@account, child) %></li>
+    <li>
+      <%= link_to child.name, account_child_path(@account, child) %>
+      <%= button_to "Delete", child, method: :delete, form: { style: "display:inline;", data: { turbo: false } } %>
+    </li>
   <% end %>
 </ul>
 

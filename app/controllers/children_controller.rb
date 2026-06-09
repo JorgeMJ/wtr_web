@@ -67,7 +67,7 @@ class ChildrenController < ApplicationController
     @child.destroy!
 
     respond_to do |format|
-      format.html { redirect_to children_account_path(@account), notice: "Child was successfully destroyed.", status: :see_other }
+      format.html { redirect_to children_account_path(@account), status: :see_other }
       format.json { head :no_content }
     end
   end
@@ -79,7 +79,6 @@ class ChildrenController < ApplicationController
     end
 
     def set_account
-      puts 'MY_PARAMS', params
       @account = Account.find(params[:account_id])
     end
 
