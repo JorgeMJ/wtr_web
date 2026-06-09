@@ -29,6 +29,7 @@
         <tr>
           <th>Word</th>
           <th>Created</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -36,6 +37,7 @@
           <tr>
             <td><%= word.word %></td>
             <td><%= word.date %></td>
+            <td><%= button_to "Delete", word, method: :delete, form: { data: { turbo: false } } %></td>
           </tr>
         <% end %>
       </tbody>

@@ -1,5 +1,5 @@
 class WordsController < ApplicationController
-  before_action :set_word, only: %i[ show edit update destroy ]
+  before_action :set_word, only: %i[ show edit update ]
 
   # GET /words or /words.json
   def index
@@ -49,10 +49,14 @@ class WordsController < ApplicationController
 
   # DELETE /words/1 or /words/1.json
   def destroy
+    @word = Word.find(params[:id])
+    account_id = @word.child.account.id
+    child_id = @word.child.id
+
     @word.destroy!
 
     respond_to do |format|
-      format.html { redirect_to words_path, notice: "Word was successfully destroyed.", status: :see_other }
+      format.html { redirect_to account_child_path(account_id, child_id), status: :see_other }
       format.json { head :no_content }
     end
   end
