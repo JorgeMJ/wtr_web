@@ -16,9 +16,8 @@ class MainController < ApplicationController
     if custodian
       reset_session
       session[:current_custodian_id] = custodian.id
+      account = Account.find_by(id: custodian.account_id)
     end
-
-    account = Account.find_by(id: custodian.account_id) if custodian
 
     if account
       redirect_to account_path(account)
