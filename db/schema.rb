@@ -67,7 +67,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_12_200032) do
     t.index ["child_id"], name: "index_words_on_child_id"
   end
 
-  add_foreign_key "accounts", "custodians", column: "admin_custodian_id"
+  add_foreign_key "accounts", "custodians", column: "admin_custodian_id", on_delete: :nullify
   add_foreign_key "children", "accounts"
   add_foreign_key "custodians", "accounts"
   add_foreign_key "nemo_words", "nemo_children"
