@@ -1,0 +1,2 @@
+class NemoWord < ApplicationRecord
+end
