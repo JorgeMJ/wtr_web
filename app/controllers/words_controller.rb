@@ -1,5 +1,7 @@
 class WordsController < ApplicationController
   before_action :set_word, only: %i[ show edit update ]
+  after_action :create_nemo_word, only: %i[ create ]
+  after_action :destroy_nemo_word, only: %i[ destroy ]  
 
   # GET /words or /words.json
   def index
@@ -70,5 +72,16 @@ class WordsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def word_params
       params.require(:word).permit(:word, :child_id, :date)
+    end
+
+    def create_nemo_word
+      nemo_child = NemoChild.find_by(child_id: @word.child.id)
+      NemoWord.create!(nemo_child_id: nemo_child.id, word: @word.word)
+    end
+
+    def destroy_nemo_word
+      nemo_child = NemoChild.find_by(child_id: @word.child.id)
+      nemo_word = NemoWord.find_by(nemo_child_id: nemo_child.id, word: @word.word)
+      nemo_word&.destroy
     end
 end

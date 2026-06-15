@@ -1,6 +1,8 @@
 class ChildrenController < ApplicationController
   before_action :set_account, only: %i[ new create show]
   before_action :set_child, only: %i[ show edit update destroy ]
+  after_action :create_nemo_child, only: %i[ create ]
+  # after_action :destroy_nemo_child, only: %i[ destroy ]
 
   # GET /children or /children.json
   def index
@@ -24,20 +26,6 @@ class ChildrenController < ApplicationController
   def edit
   end
 
-  # POST /children or /children.json
-  # def create
-  #   @child = Child.new(child_params)
-
-  #   respond_to do |format|
-  #     if @child.save
-  #       format.html { redirect_to @child, notice: "Child was successfully created." }
-  #       format.json { render :show, status: :created, location: @child }
-  #     else
-  #       format.html { render :new, status: :unprocessable_entity }
-  #       format.json { render json: @child.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
   def create  
     @child = @account.children.new(child_params)
 
@@ -87,4 +75,12 @@ class ChildrenController < ApplicationController
       # params.fetch(:child, {})
       params.require(:child).permit(:name) #Make sure we pass the mandatory params
     end
+
+    def create_nemo_child
+      NemoChild.create!(child_id: @child.id)
+    end
+
+    # def destroy_nemo_child
+    #   NemoChild.find_by(child_id: @child.id)&.destroy
+    # end
 end
