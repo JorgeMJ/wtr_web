@@ -1,0 +1,22 @@
+databases:
+  - name: wtr_web
+    databaseName: wtr_web
+    user: wtr_web
+    plan: free
+
+services:
+  - type: web
+    name: wtr_web
+    runtime: ruby
+    plan: free
+    buildCommand: './bin/render-build.sh'
+    startCommand: 'bundle exec rails server'
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: wtr_web
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: WEB_CONCURRENCY
+        value: 2
