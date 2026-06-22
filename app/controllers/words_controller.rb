@@ -23,8 +23,11 @@ class WordsController < ApplicationController
 
   # POST /words or /words.json
   def create
+    puts "@@word params: #{word_params.inspect}"
     @word = Word.new(word_params)
 
+    return if @word.word.blank?
+    
     respond_to do |format|
       if @word.save
         format.html { redirect_to account_child_path(@word.child.account, @word.child)}
@@ -75,6 +78,8 @@ class WordsController < ApplicationController
     end
 
     def create_nemo_word
+      return if @word.word.blank?
+      
       nemo_child = NemoChild.find_by(child_id: @word.child.id)
       NemoWord.create!(nemo_child_id: nemo_child.id, word: @word.word)
     end
