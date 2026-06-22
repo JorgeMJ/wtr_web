@@ -74,14 +74,14 @@ class WordsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def word_params
-      params.require(:word).permit(:word, :child_id, :date)
+      params.require(:word).permit(:word, :child_id, :date, :sign)
     end
 
     def create_nemo_word
       return if @word.word.blank?
       
       nemo_child = NemoChild.find_by(child_id: @word.child.id)
-      NemoWord.create!(nemo_child_id: nemo_child.id, word: @word.word)
+      NemoWord.create!(nemo_child_id: nemo_child.id, word: @word.word, date: @word.date, sign: @word.sign)
     end
 
     def destroy_nemo_word
