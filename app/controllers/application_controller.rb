@@ -15,7 +15,15 @@ class ApplicationController < ActionController::Base
     session.delete(:current_custodian_id)
     reset_session
   end
+
+  def is_web_admin
+    is_admin = signed_in? && current_custodian.is_admin
+
+    if !is_admin
+      redirect_back(fallback_location: root_path)
+    end
+  end
   
-  # exposes methods to views
-  helper_method :current_custodian, :signed_in?
+  # exposes methods
+  helper_method :current_custodian, :signed_in?, :is_web_admin
 end

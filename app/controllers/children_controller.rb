@@ -1,4 +1,5 @@
 class ChildrenController < ApplicationController
+  before_action :is_web_admin, only: %i[ index ]
   before_action :set_account, only: %i[ new create show]
   before_action :set_child, only: %i[ show edit update destroy ]
   after_action :create_nemo_child, only: %i[ create ]

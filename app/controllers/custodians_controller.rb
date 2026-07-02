@@ -1,4 +1,5 @@
 class CustodiansController < ApplicationController
+  before_action :is_web_admin, only: %i[ index ]
   before_action :set_custodian, only: %i[ show edit update destroy ]
 
   # GET /custodians or /custodians.json

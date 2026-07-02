@@ -1,4 +1,5 @@
 class WordsController < ApplicationController
+  before_action :is_web_admin, only: %i[ index ]
   before_action :set_word, only: %i[ show edit update ]
   after_action :create_nemo_word, only: %i[ create ]
   after_action :destroy_nemo_word, only: %i[ destroy ]  
@@ -23,21 +24,15 @@ class WordsController < ApplicationController
 
   # POST /words or /words.json
   def create
-    puts "@@word params: #{word_params.inspect}"
     @word = Word.new(word_params)
-    puts "AFTER Word.new"
 
     return if @word.word.blank?
     
     respond_to do |format|
-      puts "BEFORE @word.save"
       if @word.save
-        puts "AFTER @word.save SUCCESS"
         format.html { redirect_to account_child_path(@word.child.account, @word.child)}
         format.json { render :show, status: :created, location: @word }
       else
-        puts "AFTER @word.save FAILURE"
-        puts "@word.errors.full_messages: #{@word.errors.full_messages}"
         format.html { redirect_to account_child_path(@word.child.account, @word.child), alert: @word.errors.full_messages.to_sentence }
         format.json { render json: @word.errors, status: :unprocessable_entity }
       end
@@ -84,23 +79,13 @@ class WordsController < ApplicationController
 
     def create_nemo_word
       return if @word.word.blank?
-      # if @word.save
-      #   puts "AFTER @word.save"
-      #   format.html { redirect_to account_child_path(@word.child.account, @word.child)}
-      #   format.json { render :show, status: :created, location: @word }
-      # else
-      #   format.html { redirect_to account_child_path(@word.child.account, @word.child), alert: @word.errors.full_messages.to_sentence }
-      #   format.json { render json: @word.errors, status: :unprocessable_entity }
-      # end
       
       nemo_child = NemoChild.find_by(child_id: @word.child.id)
-
       begin
         NemoWord.create!(nemo_child_id: nemo_child.id, word: @word.word, date: @word.date, sign: @word.sign)
       rescue ActiveRecord::RecordNotUnique => e
         Rails.logger.error "Failed to create NemoWord: #{e.message}"
       end
-      
     end
 
     def destroy_nemo_word

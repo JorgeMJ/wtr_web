@@ -1,4 +1,5 @@
 class AccountsController < ApplicationController
+  before_action :is_web_admin, only: %i[ index ]
   before_action :set_account, only: %i[ show edit update destroy ]
 
   # GET /accounts or /accounts.json
