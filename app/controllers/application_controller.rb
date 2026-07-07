@@ -15,10 +15,11 @@ class ApplicationController < ActionController::Base
     redirect_to root_path, notice: "Please sign in." unless signed_in?
   end
 
-  def sign_out_custodian
+  def sign_out
     session.delete(:current_custodian_id)
     session.delete(:current_account_id)
     reset_session
+    redirect_to root_path
   end
 
   def is_web_admin

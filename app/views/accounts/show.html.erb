@@ -1,6 +1,9 @@
 
 <%= render @account %>
 
+<%= button_to "Log out", sign_out_path, method: :delete %>
+<hr>
+
 <div>
   <%= link_to "Edit this account", edit_account_path(@account) %>
 

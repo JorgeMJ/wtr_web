@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   # root "accounts#new"
   root "main#index"
-  
+
+  delete "/sign_out", to: "application#sign_out", as: :sign_out
   post "/signin", to: "main#signin", as: :signin
 
   resources :words
