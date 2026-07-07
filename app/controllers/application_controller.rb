@@ -3,6 +3,10 @@ class ApplicationController < ActionController::Base
     @current_custodian ||= Custodian.find_by(id: session[:current_custodian_id]) if session[:current_custodian_id]
   end
 
+  def current_account
+    @current_account ||= Account.find_by(id: session[:current_account_id]) if session[:current_account_id]
+  end
+
   def signed_in?
     current_custodian.present?
   end
@@ -13,6 +17,7 @@ class ApplicationController < ActionController::Base
 
   def sign_out_custodian
     session.delete(:current_custodian_id)
+    session.delete(:current_account_id)
     reset_session
   end
 
@@ -25,5 +30,5 @@ class ApplicationController < ActionController::Base
   end
   
   # exposes methods
-  helper_method :current_custodian, :signed_in?, :is_web_admin
+  helper_method :current_custodian, :current_account, :signed_in?, :is_web_admin
 end

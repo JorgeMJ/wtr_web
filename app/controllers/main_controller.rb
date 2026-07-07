@@ -1,5 +1,4 @@
 class MainController < ApplicationController
-
   before_action :current_custodian # only: [:index, :signin] ??
   def index
     if current_custodian
@@ -15,8 +14,9 @@ class MainController < ApplicationController
 
     if custodian
       reset_session
-      session[:current_custodian_id] = custodian.id
       account = Account.find_by(id: custodian.account_id)
+      session[:current_custodian_id] = custodian.id
+      session[:current_account_id] = account.id
     end
 
     if account

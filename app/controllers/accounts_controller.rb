@@ -1,6 +1,7 @@
 class AccountsController < ApplicationController
   before_action :is_web_admin, only: %i[ index ]
   before_action :set_account, only: %i[ show edit update destroy ]
+  before_action :authenticate_account, only: [:show, :edit, :update, :destroy, :children, :custodians]
 
   # GET /accounts or /accounts.json
   def index
@@ -15,7 +16,11 @@ class AccountsController < ApplicationController
 
   # GET /accounts/new
   def new
-    @account = Account.new
+    if current_account
+      @account = Account.new(account_params)
+    else
+      @account = Account.new
+    end
   end
 
   # GET /accounts/1/edit
@@ -85,6 +90,7 @@ class AccountsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_account
+      puts "SET_ACCOUNT: params[:id]: #{params[:id]}"
       @account = Account.find(params[:id])
     end
 
@@ -92,5 +98,11 @@ class AccountsController < ApplicationController
     def account_params
       # params.fetch(:account, {})
       params.require(:account).permit(:parent_name, :parent_email)
+    end
+
+    def authenticate_account
+      if (current_account.id != params[:id].to_i) && !current_custodian.is_admin
+        redirect_to root_path, notice: "You are not authorized to view this account."
+      end
     end
 end
