@@ -10,8 +10,8 @@ services:
     runtime: ruby
     plan: free
     buildCommand: './bin/render-build.sh'
-    startCommand: 'bundle exec rails server'
     releaseCommand: 'bundle exec rails db:migrate && bundle exec rails db:seed'
+    startCommand: 'bundle exec rails server'
     envVars:
       - key: DATABASE_URL
         fromDatabase:
