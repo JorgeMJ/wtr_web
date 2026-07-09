@@ -11,6 +11,7 @@ services:
     plan: free
     buildCommand: './bin/render-build.sh'
     startCommand: 'bundle exec rails server'
+    releaseCommand: "bundle exec rails db:seed"
     envVars:
       - key: DATABASE_URL
         fromDatabase:

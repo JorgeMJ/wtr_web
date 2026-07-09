@@ -7,3 +7,9 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+#Create admin custodian and account if they don't exist 
+account = Account.find_or_create_by!(admin_custodian_fname: 'Admin1')
+custodian = account.custodians.find_or_create_by!(fname: 'Admin1', email: 'admin1@example.com')
+custodian.update!(is_admin: true)
+account.update!(admin_custodian_id: custodian.id)
