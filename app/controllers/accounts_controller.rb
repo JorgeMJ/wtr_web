@@ -39,13 +39,16 @@ class AccountsController < ApplicationController
       )
 
       # Set the admin custodian for the account
-      @account.update!(admin_custodian_id: custodian.id)
+      @account.update!(
+        admin_custodian_id: custodian.id,
+        admin_custodian_fname: custodian.fname
+      )
 
-      #TODO: redirecto to @account (is the account we just created):
+      session[:current_custodian_id] = custodian.id
+      session[:current_account_id] = @account.id
+      #TODO: 
       #- show id account details
       #- show who is the admin custodian
-      #-Add to bttns to redirect to:
-      # - "Parent list" and "children list"
       redirect_to @account
     else
       render :new, status: :unprocessable_entity
@@ -74,6 +77,8 @@ class AccountsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  
 
   def children
     @account = Account.find(params[:id])
