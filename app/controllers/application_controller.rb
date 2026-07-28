@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
   end
 
   def sign_out
+    puts "Session before sign out: #{session.inspect}"
     session.delete(:current_custodian_id)
     session.delete(:current_account_id)
     reset_session
@@ -31,5 +32,5 @@ class ApplicationController < ActionController::Base
   end
   
   # exposes methods
-  helper_method :current_custodian, :current_account, :signed_in?, :is_web_admin
+  helper_method :current_custodian, :current_account, :signed_in?, :sign_out, :is_web_admin
 end

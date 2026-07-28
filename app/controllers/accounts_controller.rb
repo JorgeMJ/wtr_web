@@ -2,7 +2,7 @@ class AccountsController < ApplicationController
   before_action :is_web_admin, only: %i[ index ]
   before_action :set_account, only: %i[ show edit update destroy ]
   before_action :authenticate_account, only: [:show, :edit, :update, :destroy, :children, :custodians]
-
+ 
   # GET /accounts or /accounts.json
   def index
     #Renders all accounts index.html
@@ -71,6 +71,7 @@ class AccountsController < ApplicationController
   # DELETE /accounts/1 or /accounts/1.json
   def destroy
     @account.destroy!
+    empty_session
 
     respond_to do |format|
       format.html { redirect_to root_path, notice: "Account was successfully destroyed.", status: :see_other }
@@ -109,5 +110,11 @@ class AccountsController < ApplicationController
       if (current_account.id != params[:id].to_i) && !current_custodian.is_admin
         redirect_to root_path, notice: "You are not authorized to view this account."
       end
+    end
+
+    def empty_session
+      session.delete(:current_custodian_id)
+      session.delete(:current_account_id)
+      reset_session
     end
 end
