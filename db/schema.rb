@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_07_09_162339) do
+ActiveRecord::Schema[7.1].define(version: 2026_08_13_121500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -67,7 +67,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_07_09_162339) do
     t.datetime "updated_at", null: false
     t.date "date", default: "2026-06-22", null: false
     t.boolean "sign", default: false
-    t.index ["child_id", "word"], name: "index_words_on_child_id_and_word", unique: true
+    t.string "encoded_attr", default: "", null: false
+    t.index ["child_id", "encoded_attr"], name: "index_words_on_child_id_and_encoded_attr", unique: true
     t.index ["child_id"], name: "index_words_on_child_id"
   end
 
