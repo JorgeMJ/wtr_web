@@ -15,7 +15,7 @@
     <%= form.hidden_field :child_id, value: @child.id %>
     <div>
       <%= form.label :date, "Time" %><br>
-      <%= form.date_select :date %>
+      <%= form.date_select :date, selected: Time.zone.today %>
     </div>
     <div style="margin-top: 0.5rem;">
       <%= form.label :sign, "Sign" %><br>
