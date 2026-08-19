@@ -20,6 +20,7 @@
     <div style="margin-top: 0.5rem;">
       <%= form.label :sign, "Sign" %><br>
       <%= form.check_box :sign %>
+      <%= form.hidden_field :sign_idx, value: '0' %>
     </div>
     <div style="margin-top: 0.5rem;">
       <%= form.submit "Add Word" %>

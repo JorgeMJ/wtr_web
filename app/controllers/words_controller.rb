@@ -1,3 +1,15 @@
+# Every time we add a new attribute to the word model, we also have to add it to
+# the WORD_ATTRIBUTES_LIST and WORD_ATTRIBUTES_MAP constants below.
+
+WORD_ATTRIBUTES_LIST = [:sign]
+
+WORD_ATTRIBUTES_MAP = {
+  '0' => {'0' => '0', '1' => '1'} # 0: false, 1: true
+}
+
+MAX_NUM_ATTRIBUTES = 20
+
+
 class WordsController < ApplicationController
   before_action :is_web_admin, only: %i[ index ]
   before_action :set_word, only: %i[ show edit update ]
@@ -66,31 +78,48 @@ class WordsController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_word
-      @word = Word.find(params[:id])
+  # Use callbacks to share common setup or constraints between actions.
+  private def set_word
+    @word = Word.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  private def word_params
+    options = params.require(:word).permit(:word, :child_id, :date, :sign, :sign_idx)
+    encoded_attr = create_encoded_attr(options)
+    options[:encoded_attr] = encoded_attr
+    
+    options
+  end
+
+  private def create_nemo_word
+    return if @word.word.blank?
+    
+    nemo_child = NemoChild.find_by(child_id: @word.child.id)
+    begin
+      NemoWord.create!(nemo_child_id: nemo_child.id, word: @word.word, date: @word.date, sign: @word.sign)
+    rescue ActiveRecord::RecordNotUnique => e
+      Rails.logger.error "Failed to create NemoWord: #{e.message}"
+    end
+  end
+
+  private def destroy_nemo_word
+    nemo_child = NemoChild.find_by(child_id: @word.child.id)
+    nemo_word = NemoWord.find_by(nemo_child_id: nemo_child.id, word: @word.word)
+    nemo_word&.destroy
+  end
+
+  private def create_encoded_attr(options)
+    reminder = MAX_NUM_ATTRIBUTES - WORD_ATTRIBUTES_LIST.length 
+    encoded_reminder = '' + '0' * reminder
+    acc = "#{options[:word]}:"
+
+    WORD_ATTRIBUTES_LIST.each do |attr|
+      curr_attr_idx = options.delete("#{attr}_idx")
+      acc += WORD_ATTRIBUTES_MAP[curr_attr_idx][options[attr]]
     end
 
-    # Only allow a list of trusted parameters through.
-    def word_params
-      params.require(:word).permit(:word, :child_id, :date, :sign)
-    end
-
-    def create_nemo_word
-      return if @word.word.blank?
-      
-      nemo_child = NemoChild.find_by(child_id: @word.child.id)
-      begin
-        NemoWord.create!(nemo_child_id: nemo_child.id, word: @word.word, date: @word.date, sign: @word.sign)
-      rescue ActiveRecord::RecordNotUnique => e
-        Rails.logger.error "Failed to create NemoWord: #{e.message}"
-      end
-    end
-
-    def destroy_nemo_word
-      nemo_child = NemoChild.find_by(child_id: @word.child.id)
-      nemo_word = NemoWord.find_by(nemo_child_id: nemo_child.id, word: @word.word)
-      nemo_word&.destroy
-    end
+    encoded_attr_local = acc + encoded_reminder
+    encoded_attr_local
+  end
 end
