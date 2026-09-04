@@ -93,9 +93,13 @@ class WordsController < ApplicationController
   end
 
   private def create_nemo_word
+    # Only run when the Word was persisted successfully
+    return unless @word&.persisted?
     return if @word.word.blank?
-    
+
     nemo_child = NemoChild.find_by(child_id: @word.child.id)
+    return unless nemo_child
+
     begin
       NemoWord.create!(nemo_child_id: nemo_child.id, word: @word.word, date: @word.date, sign: @word.sign)
     rescue ActiveRecord::RecordNotUnique => e
